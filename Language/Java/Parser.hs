@@ -371,10 +371,10 @@ elementValuePair = (,) <$> ident <* tok Op_Equal <*> elementValue
 
 elementValue :: P ElementValue
 elementValue =
-    EVVal <$> (    InitArray <$> arrayInit
+    try (EVAnnArray <$> arrayOf annotation)
+    <|> EVVal <$> (    InitArray <$> arrayInit
                <|> InitExp   <$> condExp )
     <|> EVAnn <$> annotation
-
 
 ----------------------------------------------------------------------------
 -- Variable declarations
@@ -409,11 +409,14 @@ varInit =
     InitArray <$> arrayInit <|>
     InitExp   <$> exp
 
-arrayInit :: P ArrayInit
-arrayInit = braces $ do
-    vis <- seplist varInit comma
+arrayOf :: P a -> P [a]
+arrayOf p = braces $ do
+    ps <- seplist p comma
     opt comma
-    return $ ArrayInit vis
+    return ps
+
+arrayInit :: P ArrayInit
+arrayInit = ArrayInit <$> arrayOf varInit
 
 ----------------------------------------------------------------------------
 -- Statements

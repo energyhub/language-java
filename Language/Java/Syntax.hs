@@ -239,6 +239,7 @@ desugarAnnotation' = uncurry NormalAnnotation . desugarAnnotation
 -- | Annotations may contain  annotations or (loosely) expressions
 data ElementValue = EVVal VarInit
                   | EVAnn Annotation
+                  | EVAnnArray [Annotation]
   deriving (Eq,Show,Read,Typeable,Generic,Data)
 
 -----------------------------------------------------------------------

@@ -8,8 +8,14 @@ package testPackage;
   String first();
   String last();
 }
+@interface TestAnn4 {
+  TestAnn2[] value();
+}
+@interface TestAnn5 {
+  String[] value();
+}
 
-class Other { 
+class Other {
   @TestAnn1
   void Test1() {}
 
@@ -18,4 +24,12 @@ class Other {
 
   @TestAnn3(first = "foo", last = "bar")
   void Test3() {}
+
+  @TestAnn4(value = {@TestAnn2(true), @TestAnn2(false)})
+  @TestAnn4({@TestAnn2(true), @TestAnn2(false)})
+  void Test4() {}
+
+  @TestAnn5({"foo", "bar", "baz"})
+  @TestAnn5(value = {"foo", "bar", "baz"})
+  void Test5() {}
 }
